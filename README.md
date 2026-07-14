@@ -75,6 +75,8 @@ MIT
 If you find Do Now helpful, consider supporting its development:
 
 - [爱发电](https://afdian.com) — 搜索 **Do Now** 或点击主页链接
-- **微信打赏** — 扫 README 底部二维码（如有）
+- **微信打赏** — 扫下方二维码
+
+![微信打赏](wechat-pay.png)
 
 Your support helps cover developer costs and motivates continued improvement. Thank you! 🙌
