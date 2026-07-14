@@ -167,14 +167,16 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         let textField = NSTextField(labelWithString: title)
         textField.font = .systemFont(ofSize: 13)
         let textWidth = min(max(textField.attributedStringValue.size().width, 60), 300)
-        let controlsWidth: CGFloat = 16 + 8 + 16 + 8  // checkbox + spacing + pin.slash + spacing
+        let controlsWidth: CGFloat = 16 + 8 + 24 + 8  // checkbox + spacing + pin.circle(24) + spacing
         let hPadding: CGFloat = 12 + 12 + 4 + 4       // HStack padding + background padding
         let winWidth = min(max(textWidth + controlsWidth + hPadding, 160), 420)
         win.setContentSize(NSSize(width: winWidth, height: 56))
 
-        // 位置：优先继承上次的位置，否则右下角
+        // 位置：只继承上次的位置，不继承尺寸（尺寸由 setContentSize 计算决定）
         if let saved = TodoViewModel.shared.pinnedWindowFrame {
-            win.setFrame(saved, display: false)
+            var frame = win.frame
+            frame.origin = saved.origin
+            win.setFrame(frame, display: false)
         } else if let screen = NSScreen.main {
             let visible = screen.visibleFrame
             let x = visible.maxX - win.frame.width - 12
