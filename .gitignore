@@ -1,0 +1,20 @@
+# Xcode
+*.xcworkspace
+xcuserdata/
+DerivedData/
+.build/
+
+# macOS
+.DS_Store
+*.dmg
+
+# Build
+*.app
+*.dylib
+build/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
