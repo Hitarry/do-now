@@ -25,14 +25,14 @@ A macOS menu bar app for task management based on the **Eisenhower Matrix** (4-q
 
 ## Installation
 
-1. Download `Do Now.dmg` from [Releases](https://github.com/your-username/do-now/releases)
+1. Download `Do Now.dmg` from [Releases](https://github.com/Hitarry/do-now/releases)
 2. Drag `Do Now.app` to Applications folder
 3. Right-click → Open on first launch (ad-hoc signed)
 
 ### Build from Source
 
 ```bash
-git clone https://github.com/your-username/do-now.git
+git clone https://github.com/Hitarry/do-now.git
 cd do-now
 # Option 1: Use build.sh (generates project + compiles + creates DMG)
 ./build.sh
@@ -74,7 +74,7 @@ MIT
 
 If you find Do Now helpful, consider supporting its development:
 
-- [爱发电](https://afdian.com) — 搜索 **Do Now** 或点击主页链接
+- [爱发电](https://afdian.com/a/hitarry6) — 如果 Do Now 对你有帮助，欢迎赞助一杯咖啡 ☕
 - **微信打赏** — 扫下方二维码
 
 ![微信打赏](wechat-pay.png)
