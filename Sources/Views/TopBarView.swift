@@ -131,7 +131,8 @@ struct TopBarView: View {
                 .foregroundColor(.secondary).padding(.top, 8).padding(.bottom, 4)
             tipRow("右键点击待办记录 → 钉到屏幕")
             tipRow("右键菜单栏图标 → 退出 Do Now")
-            tipRow("浮动窗口可拖拽移动位置")
+            tipRow("右键悬浮窗口 → 开关呼吸效果")
+            tipRow("悬浮窗口可拖拽移动位置")
 
             Divider().padding(.top, 8)
         }

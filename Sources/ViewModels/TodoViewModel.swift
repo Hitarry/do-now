@@ -290,6 +290,10 @@ final class TodoViewModel {
 
     // MARK: - 钉到屏幕
 
+    var isPinnedBreathingEnabled = false {
+        didSet { UserDefaults.standard.set(isPinnedBreathingEnabled, forKey: "pinnedBreathingEnabled") }
+    }
+
     var onPinChanged: ((UUID?) -> Void)?
 
     func pinItem(_ id: UUID) {

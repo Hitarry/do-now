@@ -4,6 +4,7 @@ struct PinnedItemView: View {
     let itemId: UUID
 
     @Environment(TodoViewModel.self) private var viewModel
+    @State private var breathOpacity: Double = 1.0
 
     var body: some View {
         let theme = ThemeConfig.config(for: viewModel.theme)
@@ -23,21 +24,30 @@ struct PinnedItemView: View {
             }
             .buttonStyle(.plain)
 
-            // 标题
-            Text(item?.title.isEmpty == false ? item!.title : "（无标题）")
-                .font(pinDisplayFont(item: item))
-                .strikethrough(item?.isCompleted ?? false)
-                .foregroundColor(item?.isCompleted == true
-                    ? theme.secondaryText
-                    : (item?.textColor).flatMap { colorFromHex($0) } ?? theme.primaryText)
-                .lineLimit(3)
-                .fixedSize(horizontal: true, vertical: false)
+            // 标题（ZStack 隔离 opacity）
+            ZStack {
+                Text(item?.title.isEmpty == false ? item!.title : "（无标题）")
+                    .font(pinDisplayFont(item: item))
+                    .strikethrough(item?.isCompleted ?? false)
+                    .foregroundColor(item?.isCompleted == true
+                        ? theme.secondaryText
+                        : (item?.textColor).flatMap { colorFromHex($0) } ?? theme.primaryText)
+                    .lineLimit(3)
+                    .fixedSize(horizontal: true, vertical: false)
+            }
+            .opacity(viewModel.isPinnedBreathingEnabled ? breathOpacity : 1.0)
+            .frame(maxWidth: .infinity, alignment: .leading)
 
-            // 取消钉住
+            // 取消钉住（用圆形浅色背景保证透明背景下可见）
             Button(action: { viewModel.unpinItem() }) {
-                Image(systemName: "pin.slash")
-                    .font(.system(size: 11))
-                    .foregroundColor(theme.secondaryText)
+                ZStack {
+                    Circle()
+                        .fill(Color.primary.opacity(0.12))
+                        .frame(width: 24, height: 24)
+                    Image(systemName: "pin.slash")
+                        .font(.system(size: 12))
+                        .foregroundColor(theme.secondaryText)
+                }
             }
             .buttonStyle(.plain)
             .help("取消钉住")
@@ -46,13 +56,43 @@ struct PinnedItemView: View {
         .padding(.vertical, 10)
         .background(
             RoundedRectangle(cornerRadius: 10)
-                .fill(.thinMaterial)
+                .fill(viewModel.theme == .dark ? Color.black.opacity(0.3) : Color.white.opacity(0.3))
         )
         .overlay(
             RoundedRectangle(cornerRadius: 10)
-                .stroke(Color.primary.opacity(0.08), lineWidth: 0.5)
+                .stroke(Color.primary.opacity(0.06), lineWidth: 0.5)
         )
         .padding(4)
+        .onAppear {
+            startBreathingIfEnabled()
+        }
+        .onChange(of: viewModel.isPinnedBreathingEnabled) { _, enabled in
+            if enabled {
+                startBreathingIfEnabled()
+            } else {
+                withAnimation(nil) { breathOpacity = 1.0 }
+            }
+        }
+        .contextMenu {
+            let vm = viewModel
+            if vm.isPinnedBreathingEnabled {
+                Button(action: { vm.isPinnedBreathingEnabled = false }) {
+                    Label("呼吸效果", systemImage: "checkmark")
+                }
+            } else {
+                Button(action: { vm.isPinnedBreathingEnabled = true }) {
+                    Text("呼吸效果")
+                }
+            }
+        }
+    }
+
+    private func startBreathingIfEnabled() {
+        guard viewModel.isPinnedBreathingEnabled else { return }
+        breathOpacity = 1.0
+        withAnimation(.easeInOut(duration: 2).repeatForever(autoreverses: true)) {
+            breathOpacity = 0.6
+        }
     }
 
     private func pinDisplayFont(item: TodoItem?) -> Font {

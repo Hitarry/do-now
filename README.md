@@ -18,7 +18,7 @@ A macOS menu bar app for task management based on the **Eisenhower Matrix** (4-q
 - **Drag & Drop** — Move tasks between quadrants
 - **Batch Operations** — Multi-select mode for batch complete / delete / move
 - **Collapse Completed** — Hide completed tasks per quadrant
-- **Pin to Screen** — Pin a task to a floating window that stays on top of all apps (including fullscreen)
+- **Pin to Screen** — Pin a task to a floating window that stays on top of all apps (including fullscreen), with breathing animation option
 - **Text Styling** — 49 preset colors, bold, italic, font size
 - **Emoji Picker** — 300+ built-in emojis, insert with one click
 - **Themes** — System Default / Dark mode
