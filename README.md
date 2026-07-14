@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="icon.png" width="128" alt="Do Now">
+</p>
+
 # Do Now
 
 A macOS menu bar app for task management based on the **Eisenhower Matrix** (4-quadrant priority system). Stay focused on what matters.
