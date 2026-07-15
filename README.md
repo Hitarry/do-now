@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="icon.png" width="128" alt="Do Now">
+  <img src="assets/icon.png" width="128" alt="Do Now">
 </p>
 
 # Do Now
@@ -81,6 +81,6 @@ If you find Do Now helpful, consider supporting its development:
 - [爱发电](https://afdian.com/a/hitarry6) — 如果 Do Now 对你有帮助，欢迎赞助一杯咖啡 ☕
 - **微信打赏** — 扫下方二维码
 
-![微信打赏](wechat-pay.png)
+![微信打赏](assets/wechat-pay.png)
 
 Your support helps cover developer costs and motivates continued improvement. Thank you! 🙌
