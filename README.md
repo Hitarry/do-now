@@ -15,10 +15,22 @@ A macOS menu bar app for task management based on the **Eisenhower Matrix** (4-q
 - **4 Quadrants** — Urgent & Important, Not Urgent but Important, Urgent but Not Important, Not Urgent & Not Important
 - **CRUD** — Create, edit, delete tasks with inline text editing
 - **Subtasks** — One level of subtasks per task
+<p align="center">
+  <img src="assets/childitem.png" >
+</p>
+
 - **Drag & Drop** — Move tasks between quadrants
 - **Batch Operations** — Multi-select mode for batch complete / delete / move
 - **Collapse Completed** — Hide completed tasks per quadrant
 - **Pin to Screen** — Pin a task to a floating window that stays on top of all apps (including fullscreen), with breathing animation option
+<p align="center">
+  <img src="assets/ding.gif" >
+</p>
+
+<p align="center">
+  <img src="assets/breathing.gif" >
+</p>
+
 - **Text Styling** — 49 preset colors, bold, italic, font size
 - **Emoji Picker** — 300+ built-in emojis, insert with one click
 - **Themes** — System Default / Dark mode
