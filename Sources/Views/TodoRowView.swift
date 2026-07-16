@@ -20,16 +20,21 @@ struct TodoRowView: View {
         let isSelected = viewModel.selectedIds.contains(itemId)
         return VStack(spacing: 0) {
             HStack(spacing: 6) {
-                if viewModel.isSelectionMode {
-                    // 选择模式 → 选中圆
-                    Button(action: { viewModel.toggleSelection(itemId) }) {
-                        Image(systemName: isSelected
-                              ? "circle.circle.fill"
-                              : "circle")
-                            .font(.system(size: 17))
-                            .foregroundColor(isSelected ? .accentColor : theme.secondaryText)
+                // 折叠/展开按钮（仅父级待办有子任务时）
+                if !viewModel.isSelectionMode, let item = item, !item.subtasks.isEmpty {
+                    Button(action: { viewModel.toggleCollapseParent(itemId) }) {
+                        Image(systemName: viewModel.collapsedParentIds.contains(itemId)
+                              ? "chevron.right"
+                              : "chevron.down")
+                            .font(.system(size: 10, weight: .medium))
+                            .foregroundColor(theme.secondaryText)
                     }
                     .buttonStyle(.plain)
+                    .help(viewModel.collapsedParentIds.contains(itemId) ? "展开子任务" : "收起子任务")
+                }
+
+                if viewModel.isSelectionMode {
+                    // 选择模式 → 无左侧按钮，选中圆移到右侧 Spacer 区域
                 } else {
                     // 正常模式 → 完成勾选框
                     Button(action: {
@@ -95,7 +100,17 @@ struct TodoRowView: View {
 
                 Spacer()
 
-                if !viewModel.isSelectionMode {
+                if viewModel.isSelectionMode {
+                    // 选择模式 → 选中圆（移到右侧，避免与左侧完成按钮混淆）
+                    Button(action: { viewModel.toggleSelection(itemId) }) {
+                        Image(systemName: isSelected
+                              ? "circle.circle.fill"
+                              : "circle")
+                            .font(.system(size: 17))
+                            .foregroundColor(isSelected ? .accentColor : theme.secondaryText)
+                    }
+                    .buttonStyle(.plain)
+                } else {
                     // 样式
                     Button(action: {
                         if isEditing { commitEdit() }
@@ -165,8 +180,8 @@ struct TodoRowView: View {
                 }
             }
 
-            // Subtasks
-            if let item = item, !item.subtasks.isEmpty {
+            // Subtasks (collapsedParentIds 中则不显示)
+            if let item = item, !item.subtasks.isEmpty, !viewModel.collapsedParentIds.contains(itemId) {
                 ForEach(item.subtasks) { subtask in
                     TodoRowView(itemId: subtask.id, isSubtask: true)
                         .padding(.leading, 24)

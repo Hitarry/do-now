@@ -7,6 +7,7 @@ final class TodoViewModel {
     var theme: ThemeType = .system
     var draggedItemId: UUID?
     var collapsedQuadrants: Set<Quadrant> = []
+    var collapsedParentIds: Set<UUID> = []
     var pinnedItemId: UUID? {
         didSet {
             if let id = pinnedItemId, findItem(id) == nil {
@@ -173,6 +174,8 @@ final class TodoViewModel {
         var copy = items
         if let pi = parentIdx, let ci = childIdx {
             copy[pi].subtasks[ci].isCompleted.toggle()
+            // 所有子任务都完成 → 自动标记父级完成；任一子任务取消完成 → 父级取消完成
+            copy[pi].isCompleted = copy[pi].subtasks.allSatisfy(\.isCompleted)
         } else if let ci = childIdx {
             copy[ci].isCompleted.toggle()
         }
@@ -245,6 +248,14 @@ final class TodoViewModel {
 
     func hasVisibleCompletedItems(in quadrant: Quadrant) -> Bool {
         quadrantItems(quadrant).contains { $0.isCompleted }
+    }
+
+    func toggleCollapseParent(_ id: UUID) {
+        if collapsedParentIds.contains(id) {
+            collapsedParentIds.remove(id)
+        } else {
+            collapsedParentIds.insert(id)
+        }
     }
 
     // MARK: - 归档已完成
@@ -391,10 +402,16 @@ final class TodoViewModel {
         for i in copy.indices {
             if selectedIds.contains(copy[i].id) {
                 copy[i].isCompleted.toggle()
-            }
-            for j in copy[i].subtasks.indices {
-                if selectedIds.contains(copy[i].subtasks[j].id) {
+                // 父级被选中时，连带所有子任务一起切换
+                for j in copy[i].subtasks.indices {
                     copy[i].subtasks[j].isCompleted.toggle()
+                }
+            } else {
+                // 父级没被选中，仅切换单独选中的子任务
+                for j in copy[i].subtasks.indices {
+                    if selectedIds.contains(copy[i].subtasks[j].id) {
+                        copy[i].subtasks[j].isCompleted.toggle()
+                    }
                 }
             }
         }
@@ -409,7 +426,20 @@ final class TodoViewModel {
         var copy = items
         for i in copy.indices {
             if selectedIds.contains(copy[i].id) {
-                copy[i].quadrant = target
+                let old = copy[i]
+                copy[i] = TodoItem(
+                    id: old.id,
+                    title: old.title,
+                    isCompleted: old.isCompleted,
+                    isSubtask: old.isSubtask,
+                    quadrant: target,
+                    subtasks: old.subtasks,
+                    createdAt: old.createdAt,
+                    textColor: old.textColor,
+                    isBold: old.isBold,
+                    isItalic: old.isItalic,
+                    fontSize: old.fontSize
+                )
             }
         }
         items = copy
