@@ -333,13 +333,15 @@ final class TodoViewModel {
     }
 
     func exportCSV(to url: URL) {
-        var csv = "id,title,isCompleted,quadrant,createdAt,parentId\n"
+        var csv = "id,title,isCompleted,quadrant,createdAt,parentId,textColor,isBold,isItalic,fontSize\n"
         let dateFormatter = ISO8601DateFormatter()
         for item in items {
             let parentId = item.isSubtask ? "parent" : ""
-            csv += "\(item.id.uuidString),\"\(escapeCSV(item.title))\",\(item.isCompleted),\(item.quadrant.rawValue),\(dateFormatter.string(from: item.createdAt)),\(parentId)\n"
+            let fs1 = item.fontSize != nil ? String(item.fontSize!) : ""
+            csv += "\(item.id.uuidString),\"\(escapeCSV(item.title))\",\(item.isCompleted),\(item.quadrant.rawValue),\(dateFormatter.string(from: item.createdAt)),\(parentId),\(item.textColor ?? ""),\(item.isBold),\(item.isItalic),\(fs1)\n"
             for subtask in item.subtasks {
-                csv += "\(subtask.id.uuidString),\"\(escapeCSV(subtask.title))\",\(subtask.isCompleted),\(subtask.quadrant.rawValue),\(dateFormatter.string(from: subtask.createdAt)),\(item.id.uuidString)\n"
+                let fs2 = subtask.fontSize != nil ? String(subtask.fontSize!) : ""
+                csv += "\(subtask.id.uuidString),\"\(escapeCSV(subtask.title))\",\(subtask.isCompleted),\(subtask.quadrant.rawValue),\(dateFormatter.string(from: subtask.createdAt)),\(item.id.uuidString),\(subtask.textColor ?? ""),\(subtask.isBold),\(subtask.isItalic),\(fs2)\n"
             }
         }
         try? csv.write(to: url, atomically: true, encoding: .utf8)
@@ -536,7 +538,14 @@ final class TodoViewModel {
             let parentId = cols[5]
 
             if parentId.isEmpty {
-                imported.append(TodoItem(id: uuid, title: title, isCompleted: isCompleted, quadrant: quadrant, createdAt: createdAt))
+                var item = TodoItem(id: uuid, title: title, isCompleted: isCompleted, quadrant: quadrant, createdAt: createdAt)
+                if cols.count > 6 {
+                    item.textColor = cols[6].isEmpty ? nil : cols[6]
+                    item.isBold = cols[7] == "true"
+                    item.isItalic = cols[8] == "true"
+                    item.fontSize = Double(cols[9])
+                }
+                imported.append(item)
             }
         }
 
@@ -553,7 +562,16 @@ final class TodoViewModel {
             guard let quadrant = Quadrant(rawValue: cols[3]) else { continue }
             let createdAt = dateFormatter.date(from: cols[4]) ?? Date()
             let subtask = TodoItem(id: uuid, title: title, isCompleted: isCompleted, isSubtask: true, quadrant: quadrant, createdAt: createdAt)
-            imported[parentIdx].subtasks.append(subtask)
+            if cols.count > 6 {
+                var s = subtask
+                s.textColor = cols[6].isEmpty ? nil : cols[6]
+                s.isBold = cols[7] == "true"
+                s.isItalic = cols[8] == "true"
+                s.fontSize = Double(cols[9])
+                imported[parentIdx].subtasks.append(s)
+            } else {
+                imported[parentIdx].subtasks.append(subtask)
+            }
         }
 
         guard !imported.isEmpty else { return false }
