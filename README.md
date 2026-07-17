@@ -90,9 +90,10 @@ MIT
 
 If you find Do Now helpful, consider supporting its development:
 
-- [爱发电](https://afdian.com/a/hitarry6) — 如果 Do Now 对你有帮助，欢迎赞助一杯咖啡 ☕
-- **微信打赏** — 扫下方二维码
+- **微信打赏** — 如果觉得 Do Now 对你有帮助，欢迎扫码赞助一杯咖啡 ☕
 
-![微信打赏](assets/wechat-pay.png)
+<p align="center">
+  <img src="assets/wechat-pay.png" width="128" >
+</p>
 
 Your support helps cover developer costs and motivates continued improvement. Thank you! 🙌
