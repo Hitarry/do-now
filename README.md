@@ -90,10 +90,11 @@ MIT
 
 If you find Do Now helpful, consider supporting its development:
 
-- **微信打赏** — 如果觉得 Do Now 对你有帮助，欢迎扫码赞助一杯咖啡 ☕
+- **赞助打赏** — 如果觉得**Do Now**对你有帮助，欢迎扫码赞助一杯咖啡 ☕
 
 <p align="center">
   <img src="assets/wechat-pay.png" width="128" >
+   <img src="assets/Alipay.png" width="115" >
 </p>
 
 Your support helps cover developer costs and motivates continued improvement. Thank you! 🙌
